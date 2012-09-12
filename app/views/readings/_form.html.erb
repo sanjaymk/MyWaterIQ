@@ -1,0 +1,61 @@
+<%= form_for(@reading) do |f| %>
+  <% if @reading.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@reading.errors.count, "error") %> prohibited this reading from being saved:</h2>
+
+      <ul>
+      <% @reading.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :meter_id %><br />
+    <%= f.text_field :meter_id %>
+  </div>
+  <div class="field">
+    <%= f.label :read_date %><br />
+    <%= f.datetime_select :read_date %>
+  </div>
+  <div class="field">
+    <%= f.label :meter_reading %><br />
+    <%= f.text_field :meter_reading %>
+  </div>
+  <div class="field">
+    <%= f.label :corrected_amt %><br />
+    <%= f.number_field :corrected_amt %>
+  </div>
+  <div class="field">
+    <%= f.label :receiver_id %><br />
+    <%= f.text_field :receiver_id %>
+  </div>
+  <div class="field">
+    <%= f.label :customer %><br />
+    <%= f.text_field :customer %>
+  </div>
+  <div class="field">
+    <%= f.label :customer_name %><br />
+    <%= f.text_field :customer_name %>
+  </div>
+  <div class="field">
+    <%= f.label :location_id %><br />
+    <%= f.text_field :location_id %>
+  </div>
+  <div class="field">
+    <%= f.label :service_address %><br />
+    <%= f.text_field :service_address %>
+  </div>
+  <div class="field">
+    <%= f.label :meter_number %><br />
+    <%= f.text_field :meter_number %>
+  </div>
+  <div class="field">
+    <%= f.label :meter_size %><br />
+    <%= f.text_field :meter_size %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

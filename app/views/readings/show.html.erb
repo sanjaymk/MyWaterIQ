@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Meter:</b>
+  <%= @reading.meter_id %>
+</p>
+
+<p>
+  <b>Read date:</b>
+  <%= @reading.read_date %>
+</p>
+
+<p>
+  <b>Meter reading:</b>
+  <%= @reading.meter_reading %>
+</p>
+
+<p>
+  <b>Corrected amt:</b>
+  <%= @reading.corrected_amt %>
+</p>
+
+<p>
+  <b>Receiver:</b>
+  <%= @reading.receiver_id %>
+</p>
+
+<p>
+  <b>Customer:</b>
+  <%= @reading.customer %>
+</p>
+
+<p>
+  <b>Customer name:</b>
+  <%= @reading.customer_name %>
+</p>
+
+<p>
+  <b>Location:</b>
+  <%= @reading.location_id %>
+</p>
+
+<p>
+  <b>Service address:</b>
+  <%= @reading.service_address %>
+</p>
+
+<p>
+  <b>Meter number:</b>
+  <%= @reading.meter_number %>
+</p>
+
+<p>
+  <b>Meter size:</b>
+  <%= @reading.meter_size %>
+</p>
+
+
+<%= link_to 'Edit', edit_reading_path(@reading) %> |
+<%= link_to 'Back', readings_path %>

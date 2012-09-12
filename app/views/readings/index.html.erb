@@ -1,0 +1,51 @@
+<div>
+    <form action="/readings" method="get">
+    <b>Search</b>
+    <b>Threshold value</b><input type="text" name="search_text" value="">
+    <input type="submit" name="search" value="Search">
+    </form>
+<div>    
+
+<h1>Listing readings</h1>
+<b> Listing <%=@readings.size%> records</b>
+<table>
+  <tr>
+    <th>Meter</th>
+    <th>Read date</th>
+    <th>Meter reading</th>
+    <th>Corrected amt</th>
+    <th>Receiver</th>
+    <th>Customer</th>
+    <th>Customer name</th>
+    <th>Location</th>
+    <th>Service address</th>
+    <th>Meter number</th>
+    <th>Meter size</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @readings.each do |reading| %>
+  <tr>
+    <td><%= reading.meter_id %></td>
+    <td><%= reading.read_date %></td>
+    <td><%= reading.meter_reading %></td>
+    <td><%= reading.corrected_amt %></td>
+    <td><%= reading.receiver_id %></td>
+    <td><%= reading.customer %></td>
+    <td><%= reading.customer_name %></td>
+    <td><%= reading.location_id %></td>
+    <td><%= reading.service_address %></td>
+    <td><%= reading.meter_number %></td>
+    <td><%= reading.meter_size %></td>
+    <td><%= link_to 'Show', reading %></td>
+    <td><%= link_to 'Edit', edit_reading_path(reading) %></td>
+    <td><%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Reading', new_reading_path %>
