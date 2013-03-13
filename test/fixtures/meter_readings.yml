@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  meter_id: MyString
+  read_date: 2013-03-09 15:55:02
+  meter_reading: MyString
+  corrected_amt: 1
+  receiver_id: MyString
+  customer: MyString
+  customer_name: MyString
+  location_id: MyString
+  service_address: MyString
+  meter_number: MyString
+  meter_size: MyString
+
+two:
+  meter_id: MyString
+  read_date: 2013-03-09 15:55:02
+  meter_reading: MyString
+  corrected_amt: 1
+  receiver_id: MyString
+  customer: MyString
+  customer_name: MyString
+  location_id: MyString
+  service_address: MyString
+  meter_number: MyString
+  meter_size: MyString

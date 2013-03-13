@@ -1,4 +1,9 @@
 MyWaterIQ::Application.routes.draw do
+
+  match '/meter_readings/search', :controller => 'meter_readings', :action => 'search'
+
+  resources :meter_readings
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

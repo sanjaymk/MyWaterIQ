@@ -7,15 +7,16 @@ class ReadingsController < ApplicationController
   # GET /readings.json
   def index
 
-    #CSV.foreach('daily_files/DailyData2.txt',:headers=>true,:col_sep=>'|') do | row|
-     # puts row.to_hash
-      #logger.debug("Hash is #{row.to_hash}")
-      # Reading.create!(row.to_hash)
-    #end
-    logger.debug("Search text is #{params[:search_text]}")
-    @readings = Reading.where("corrected_amt > ?",params[:search_text])
-    logger.debug("Readings value is ")
-    #@readings = Reading.all unless @readings.nil?
+    #  CSV.foreach('daily_files/DailyData_Original.txt',:headers=>true,:col_sep=>'|') do | row|
+    #    puts row.to_hash
+    #    logger.debug("Hash is #{row.to_hash}")
+    #     Reading.create!(row.to_hash)
+    #  end
+    # #logger.debug("Search text is #{params[:search_text]}")
+    # #@readings = Reading.where("corrected_amt > ?",params[:search_text])
+    
+    logger.debug "boolean value is #{@readings.nil?}"
+    @readings = Reading.all if @readings.nil?
 
     respond_to do |format|
       format.html # index.html.erb
@@ -23,10 +24,30 @@ class ReadingsController < ApplicationController
     end
   end
 
+
+  def search
+     puts "Inside search #{params[:corrected_amt]}"
+     #where_condition = params[:corrected_amt] unless params[:corrected_amt].nil?
+     
+     corrected_amt = params[:corrected_amt]
+     start_date = params[:start_date]
+     end_date = params[:end_date]
+     customer_name = params[:customer_name]
+
+     @readings = Reading.where("corrected_amt > ? and read_date between ? and ? and customer_name = ?",
+            corrected_amt,start_date,end_date,customer_name)
+     logger.debug("size is #{@readings.size}")
+     puts "size is #{@readings.size}"
+     render :action=>:index
+
+  end  
+
   # GET /readings/1
   # GET /readings/1.json
   def show
-    @reading = Reading.find(params[:id])
+    
+
+    @reading = Reading.find
 
     respond_to do |format|
       format.html # show.html.erb
@@ -93,4 +114,10 @@ class ReadingsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+def search
+    @readings = Reading.where("corrected_amt > ?",params[:threshold_search])
+    logger.debug "inside search "
+  end
+
 end

@@ -1,0 +1,63 @@
+<script language="javascript">
+
+function doSearch()
+{
+
+    document.forms[0].action = document.forms[0].action + "?corrected_amt="+document.forms[0].corrected_amt.value+"&start_date="+document.forms[0].start_date.value+"&end_date="+document.forms[0].end_date.value;
+    alert(document.forms[0].action);
+    document.forms[0].submit();
+
+}
+</script>
+    <form action="/readings/search" method="get">
+    <b>Search</b><br>
+    <b>Threshold value</b><input type="text" name="corrected_amt" value=""><br>
+    <b>Start Date</b><input type="text" name="start_date" value=""> (mm-dd-yyyy)<br>
+    <b>End Date</b><input type="text" name="end_date" value=""> (mm-dd-yyyy)
+    <input type="button" name="search" value="Search" onClick="return doSearch()">
+    </form>
+<div>    
+
+<h1>Listing readings</h1>
+<b> Listing <%=@readings.size unless @readings.nil?%> records</b>
+<table border="1">
+  <tr>
+    <th>Meter</th>
+    <th>Read date</th>
+    <th>Meter reading</th>
+    <th>Corrected amt</th>
+    <th>Receiver</th>
+    <th>Customer</th>
+    <th>Customer name</th>
+    <th>Location</th>
+    <th>Service address</th>
+    <th>Meter number</th>
+    <th>Meter size</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @readings.each do |reading| %>
+  <tr border="1">
+    <td border="1" nowrap><%= reading.meter_id %></td>
+    <td  border="1" nowrap><%= reading.read_date %></td>
+    <td  border="1" nowrap><%= reading.meter_reading %></td>
+    <td  border="1" nowrap><%= reading.corrected_amt %></td>
+    <td  border="1"><%= reading.receiver_id %></td>
+    <td  border="1"><%= reading.customer %></td>
+    <td  border="1"><%= reading.customer_name %></td>
+    <td  border="1"><%= reading.location_id %></td>
+    <td  border="1"><%= reading.service_address %></td>
+    <td  border="1"><%= reading.meter_number %></td>
+    <td  border="1"><%= reading.meter_size %></td>
+    <td  border="1"><%= link_to 'Show', reading %></td>
+    <td  border="1"><%= link_to 'Edit', edit_reading_path(reading) %></td>
+    <td  border="1"><%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Reading', new_reading_path %>

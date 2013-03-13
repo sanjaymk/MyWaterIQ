@@ -7,7 +7,10 @@ gem 'rails', '3.2.6'
 
 
 group :development do
-	gem 'sqlite3', '1.3.5'
+#	gem 'sqlite3', '1.3.5'
+	gem 'mysql'
+	gem 'mysql2'
+# gem 'activerecord-mysql2-adapter'
 end
 
 
@@ -21,10 +24,11 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '1.2.3'
+ 
 end
 
-gem 'jquery-rails','2.0.0'
-
+gem 'jquery-rails'
+gem 'rufus-scheduler'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
