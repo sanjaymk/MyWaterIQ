@@ -5,7 +5,9 @@ class MeterReadingsController < ApplicationController
   # GET /meter_readings
   # GET /meter_readings.json
   def index
-  CSV.foreach('daily_files/DailyData1.txt',:headers=>true,:col_sep=>'|') do | row|
+  
+  CSV.foreach('daily_files/DailyData.txt',:headers=>true,:col_sep=>'|') do | row|
+  #CSV.foreach('daily_files/DailyData.txt',:col_sep=>'|') do | row|
       puts row.to_hash
       logger.debug("Hash is #{row.to_hash}")
       hash_val = row.to_hash 
