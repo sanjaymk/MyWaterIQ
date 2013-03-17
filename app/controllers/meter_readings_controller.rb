@@ -5,7 +5,7 @@ class MeterReadingsController < ApplicationController
   # GET /meter_readings
   # GET /meter_readings.json
 
-  def addCSVRows
+  def refreshDailyData
     CSV.foreach('daily_files/DailyData.txt',:headers=>true,:col_sep=>'|') do | row|
       #CSV.foreach('daily_files/DailyData.txt',:col_sep=>'|') do | row|
       puts row.to_hash

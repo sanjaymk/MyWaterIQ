@@ -1,5 +1,6 @@
 MyWaterIQ::Application.routes.draw do
 
+  match '/meter_readings/refreshDailyData', :controller => 'meter_readings', :action => 'refreshDailyData'
   match '/meter_readings/search', :controller => 'meter_readings', :action => 'search'
 
   resources :meter_readings
