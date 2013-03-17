@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130315023529) do
+ActiveRecord::Schema.define(:version => 20130317214739) do
 
   create_table "meter_readings", :force => true do |t|
     t.string   "meter_id"
@@ -26,6 +26,16 @@ ActiveRecord::Schema.define(:version => 20130315023529) do
     t.string   "service_address"
     t.string   "meter_number"
     t.string   "meter_size"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "thresholds", :force => true do |t|
+    t.string   "customer_id"
+    t.integer  "threshold_value"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "active"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end

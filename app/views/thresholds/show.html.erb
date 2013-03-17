@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Customer:</b>
+  <%= @threshold.customer_id %>
+</p>
+
+<p>
+  <b>Threshold value:</b>
+  <%= @threshold.threshold_value %>
+</p>
+
+<p>
+  <b>Start date:</b>
+  <%= @threshold.start_date %>
+</p>
+
+<p>
+  <b>End date:</b>
+  <%= @threshold.end_date %>
+</p>
+
+<p>
+  <b>Active:</b>
+  <%= @threshold.active %>
+</p>
+
+
+<%= link_to 'Edit', edit_threshold_path(@threshold) %> |
+<%= link_to 'Back', thresholds_path %>

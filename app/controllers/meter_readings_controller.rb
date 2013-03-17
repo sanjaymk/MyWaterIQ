@@ -6,19 +6,32 @@ class MeterReadingsController < ApplicationController
   # GET /meter_readings.json
 
   def refreshDailyData
+    customer_names_for_alerts = '';
+      #threshold = Threshold.find(:first)
+      threshold_value = 20000;#threshold.threshold_value      
+
     CSV.foreach('daily_files/DailyData.txt',:headers=>true,:col_sep=>'|') do | row|
-      #CSV.foreach('daily_files/DailyData.txt',:col_sep=>'|') do | row|
       puts row.to_hash
       logger.debug("Hash is #{row.to_hash}")
       hash_val = row.to_hash 
       logger.debug("date is #{hash_val["read_date"]}")
       hash_val["read_date"] = DateTime.strptime(hash_val["read_date"],"%m/%d/%y").strftime("%Y-%m-%d") unless hash_val["read_date"].nil?
-      logger.debug("new hash is is #{hash_val}")
-      #MeterReading.create!(row.to_hash)
-      MeterReading.create!(hash_val)
-      #TestForInt.create!(row.to_hash)
-    end
+      
 
+      
+      if(hash_val["corrected_amt"].to_f > threshold_value)
+        if(customer_names_for_alerts=='')
+         customer_names_for_alerts = hash_val["customer_name"]
+        else
+          customer_names_for_alerts = customer_names_for_alerts + "<br>" + hash_val["customer_name"]
+        end
+      end
+
+      logger.debug("new hash is is #{hash_val}")
+      MeterReading.create!(hash_val)
+    end
+    ReadingAlertMailer.send_alert(customer_names_for_alerts).deliver
+    logger.debug("Customer names above the threshold are "+customer_names_for_alerts);
   end
 
 
@@ -143,7 +156,7 @@ def search
      puts "size is #{@readings.size}"
      render :action=>:index
 
-  end
+end
 
 
 end

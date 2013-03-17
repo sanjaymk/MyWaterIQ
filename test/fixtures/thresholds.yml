@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  customer_id: MyString
+  threshold_value: 
+  start_date: 2013-03-17 17:47:39
+  end_date: 2013-03-17 17:47:39
+  active: MyString
+
+two:
+  customer_id: MyString
+  threshold_value: 
+  start_date: 2013-03-17 17:47:39
+  end_date: 2013-03-17 17:47:39
+  active: MyString

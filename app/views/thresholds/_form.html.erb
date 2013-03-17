@@ -1,0 +1,37 @@
+<%= form_for(@threshold) do |f| %>
+  <% if @threshold.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@threshold.errors.count, "error") %> prohibited this threshold from being saved:</h2>
+
+      <ul>
+      <% @threshold.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :customer_id %><br />
+    <%= f.text_field :customer_id %>
+  </div>
+  <div class="field">
+    <%= f.label :threshold_value %><br />
+    <%= f.text_field :threshold_value %>
+  </div>
+  <div class="field">
+    <%= f.label :start_date %><br />
+    <%= f.datetime_select :start_date %>
+  </div>
+  <div class="field">
+    <%= f.label :end_date %><br />
+    <%= f.datetime_select :end_date %>
+  </div>
+  <div class="field">
+    <%= f.label :active %><br />
+    <%= f.text_field :active %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

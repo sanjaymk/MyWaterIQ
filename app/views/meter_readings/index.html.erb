@@ -11,7 +11,7 @@ function doSearch()
 </script>
     <form action="/meter_readings/search" method="get">
     <b>Search</b><br>
-    <b>Threshold value</b><input type="text" name="corrected_amt" value="<%params[:corrected_amt]%>"><br>
+    <b>Threshold value</b><input type="text" name="corrected_amt" value="<%=params[:corrected_amt]%>"><br>
     <b>Start Date</b><input type="text" name="start_date" value="<%=params[:start_date]%>"> (yyyy-mm-dd)<br>
     <b>End Date</b><input type="text" name="end_date" value="<%=params[:end_date]%>"> (yyyy-mm-dd)<br>
     <b>Customer Name</b><input type="text" name="customer_name" value="<%=params[:customer_name]%>">
