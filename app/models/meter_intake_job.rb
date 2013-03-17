@@ -10,6 +10,20 @@ def getdailyreadingsfile
  		Dir.mkdir(new_dir)
  		ftp.gettextfile("DailyData.txt",new_dir+'/DailyData.txt')
  		ftp.close
+
+ 		first_line = ""
+ 		File.open("#{new_dir}/DailyData.txt","r"){|f|
+ 		f.gets;first_line=f.read	
+ 		first_line.gsub!("Corrected Amt","corrected_amt")
+ 		first_line.gsub!("LocationID","location_id")
+ 		first_line.gsub!("ServiceAddress","service_address")
+ 		}
+
+		File.open("/home/sanjay/projects/rails/downloads/daily_files/#{new_dir}/DailyData.txt","w+"){|f|
+			f.write(first_line)
+ 		} 		
+
+
  	end
 
 end
