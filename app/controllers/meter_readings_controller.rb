@@ -4,10 +4,10 @@ require 'active_support/core_ext/hash'
 class MeterReadingsController < ApplicationController
   # GET /meter_readings
   # GET /meter_readings.json
-  def index
-  
-  CSV.foreach('daily_files/DailyData.txt',:headers=>true,:col_sep=>'|') do | row|
-  #CSV.foreach('daily_files/DailyData.txt',:col_sep=>'|') do | row|
+
+  def addCSVRows
+    CSV.foreach('daily_files/DailyData.txt',:headers=>true,:col_sep=>'|') do | row|
+      #CSV.foreach('daily_files/DailyData.txt',:col_sep=>'|') do | row|
       puts row.to_hash
       logger.debug("Hash is #{row.to_hash}")
       hash_val = row.to_hash 
@@ -18,7 +18,14 @@ class MeterReadingsController < ApplicationController
       MeterReading.create!(hash_val)
       #TestForInt.create!(row.to_hash)
     end
-    @readings = MeterReading.all if @readings.nil?
+
+  end
+
+
+  def index
+  
+      #@readings = MeterReading.find() if @readings.nil?
+    @readings = Array.new if @readings.nil?
 
     respond_to do |format|
       format.html # index.html.erb
@@ -115,16 +122,23 @@ def search
      #where_condition = params[:corrected_amt] unless params[:corrected_amt].nil?
 
      corrected_amt = params[:corrected_amt]
-     corrected_amt = 0 if corrected_amt.nil?
+     corrected_amt = 0 if corrected_amt.to_s==''
      start_date = params[:start_date]
-     start_date = "2000-01-01" if (start_date.to_s == '')
+     #start_date = DateTime.now.strftime("%Y-%m-%d") if start_date.to_s == ''
+     start_date = "2013-03-09"#DateTime.now.strftime("%Y-%m-%d") if start_date.to_s == ''
+     params[:start_date]=start_date
      end_date = params[:end_date] 
-     end_date = DateTime.now.strftime("%Y-%m-%d") if end_date.to_s == ''
-     #customer_name = params[:customer_name]
+     end_date ="2013-03-09"# DateTime.now.strftime("%Y-%m-%d") if end_date.to_s == ''
+     params[:end_date]=end_date
+     customer_name = params[:customer_name]
+     if customer_name.to_s == ''
+        customer_name = '%'
+     else
+        customer_name = '%'+customer_name+'%'
+     end
 
-
-     @readings = MeterReading.where("corrected_amt > ? and read_date between ? and ?",
-            corrected_amt,start_date,end_date)
+     @readings = MeterReading.where("corrected_amt > ? and read_date between ? and ? and customer_name like ?",
+       corrected_amt,start_date,end_date,customer_name).order("corrected_amt DESC").limit(200)
      logger.debug("size is #{@readings.size}")
      puts "size is #{@readings.size}"
      render :action=>:index
