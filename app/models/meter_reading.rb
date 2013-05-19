@@ -1,3 +1,3 @@
 class MeterReading < ActiveRecord::Base
-  attr_accessible :corrected_amt, :customer, :customer_name, :location, :location_id, :meter_id, :meter_number, :meter_reading, :meter_size, :read_date, :receiver_id, :service_address
+  attr_accessible :address, :corrected_amt, :equipment_class, :large_amt, :leak_status, :meter_reading, :meter_size, :ocr_street_addr, :read_date, :receiver_id, :remote_id, :route_id, :service_type, :usage_number
 end

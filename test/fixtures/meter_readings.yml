@@ -1,29 +1,33 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  meter_id: MyString
-  read_date: 2013-03-14 22:35:29
+  usage_number: MyString
+  corrected_amt: MyString
+  remote_id: MyString
   meter_reading: MyString
-  corrected_amt: 1
+  leak_status: MyString
+  read_date: 2013-05-12 22:56:23
+  address: MyString
+  ocr_street_addr: MyString
   receiver_id: MyString
-  customer: MyString
-  customer_name: MyString
-  location_id: MyString
-  location: MyString
-  service_address: MyString
-  meter_number: MyString
+  service_type: MyString
+  equipment_class: MyString
   meter_size: MyString
+  route_id: MyString
+  large_amt: MyString
 
 two:
-  meter_id: MyString
-  read_date: 2013-03-14 22:35:29
+  usage_number: MyString
+  corrected_amt: MyString
+  remote_id: MyString
   meter_reading: MyString
-  corrected_amt: 1
+  leak_status: MyString
+  read_date: 2013-05-12 22:56:23
+  address: MyString
+  ocr_street_addr: MyString
   receiver_id: MyString
-  customer: MyString
-  customer_name: MyString
-  location_id: MyString
-  location: MyString
-  service_address: MyString
-  meter_number: MyString
+  service_type: MyString
+  equipment_class: MyString
   meter_size: MyString
+  route_id: MyString
+  large_amt: MyString

@@ -1,4 +1,4 @@
-require 'csv'
+require 'smarter_csv'
 require 'active_support/core_ext/hash'
 
 class MeterReadingsController < ApplicationController
@@ -6,17 +6,53 @@ class MeterReadingsController < ApplicationController
   # GET /meter_readings.json
 
   def refreshDailyData
+     customer_names_for_alerts = Array.new;
+
+
+    lines = []
+    IO.foreach( "daily_files/orc_meters_working_whole.txt" ) do |line|
+      lines << line.split('\t').map { |v| v.strip }
+    end  
+
+    #puts "lines are:"
+    lines.each do |line|
+      puts lines.join("!")
+    end
+
+    File.open("daily_files/orc_meters_working_parsed.txt","w") { |f| f.write(lines) } 
+
+    arr = SmarterCSV.process('daily_files/orc_meters_working_parsed.txt',{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
+    arr.each { |row|
+      if row[:read_date]
+      row[:read_date] = DateTime.strptime(row[:read_date],"%m/%d/%y").strftime("%Y-%m-%d") unless row[:read_date].nil?
+      row[:read_date] = row[:read_date] + ' ' + row[:last_time]
+      row.delete(:last_time)
+      MeterReading.create!(row)
+
+        if(row[:large_amt]=='***')
+          customer_names_for_alerts << row[:ocr_street_addr]
+        end
+      end
+    }
+    puts "Remote Ids that have a problem #{customer_names_for_alerts}"
+
+    ReadingAlertMailer.send_alerts(customer_names_for_alerts).deliver if customer_names_for_alerts.size > 0
+  end
+
+  def old_refreshDailyData
     customer_names_for_alerts = '';
       #threshold = Threshold.find(:first)
-      threshold_value = 20000;#threshold.threshold_value      
+      threshold_value = 200000;#threshold.threshold_value      
 
-    CSV.foreach('daily_files/DailyData.txt',:headers=>true,:col_sep=>'|') do | row|
+    CSV.foreach('daily_files/orc_meters.txt',:headers=>true,:col_sep=>'\t') do | row|
       puts row.to_hash
       logger.debug("Hash is #{row.to_hash}")
       hash_val = row.to_hash 
       logger.debug("date is #{hash_val["read_date"]}")
       hash_val["read_date"] = DateTime.strptime(hash_val["read_date"],"%m/%d/%y").strftime("%Y-%m-%d") unless hash_val["read_date"].nil?
-      
+
+      hash_val["read_date"] = hash_val["read_date"]+hash_val["last_time"]
+
 
       
       if(hash_val["corrected_amt"].to_f > threshold_value)
@@ -30,14 +66,14 @@ class MeterReadingsController < ApplicationController
       logger.debug("new hash is is #{hash_val}")
       MeterReading.create!(hash_val)
     end
-    ReadingAlertMailer.send_alert(customer_names_for_alerts).deliver
+    #ReadingAlertMailer.send_alert(customer_names_for_alerts).deliver
     logger.debug("Customer names above the threshold are "+customer_names_for_alerts);
   end
 
 
   def index
   
-      #@readings = MeterReading.find() if @readings.nil?
+    @readings = MeterReading.find(:all) if @readings.nil?
     @readings = Array.new if @readings.nil?
 
     respond_to do |format|
@@ -130,7 +166,7 @@ class MeterReadingsController < ApplicationController
     end
   end
 
-def search
+  def search
      puts "Inside search #{params[:corrected_amt].nil?}"
      #where_condition = params[:corrected_amt] unless params[:corrected_amt].nil?
 
@@ -138,25 +174,25 @@ def search
      corrected_amt = 0 if corrected_amt.to_s==''
      start_date = params[:start_date]
      #start_date = DateTime.now.strftime("%Y-%m-%d") if start_date.to_s == ''
-     start_date = "2013-03-09"#DateTime.now.strftime("%Y-%m-%d") if start_date.to_s == ''
+     start_date = DateTime.now.strftime("%Y-%m-%d") if start_date.to_s == ''
      params[:start_date]=start_date
      end_date = params[:end_date] 
-     end_date ="2013-03-09"# DateTime.now.strftime("%Y-%m-%d") if end_date.to_s == ''
+     end_date =DateTime.now.strftime("%Y-%m-%d") if end_date.to_s == ''
      params[:end_date]=end_date
-     customer_name = params[:customer_name]
-     if customer_name.to_s == ''
-        customer_name = '%'
-     else
-        customer_name = '%'+customer_name+'%'
-     end
+     # customer_name = params[:customer_name]
+     # if customer_name.to_s == ''
+     #    customer_name = '%'
+     # else
+     #    customer_name = '%'+customer_name+'%'
+     # end
 
-     @readings = MeterReading.where("corrected_amt > ? and read_date between ? and ? and customer_name like ?",
-       corrected_amt,start_date,end_date,customer_name).order("corrected_amt DESC").limit(200)
+     # @readings = MeterReading.where("corrected_amt > ? and read_date between ? and ? and customer_name like ?",
+     #   corrected_amt,start_date,end_date,customer_name).order("corrected_amt DESC").limit(200)
+     @readings = MeterReading.where("corrected_amt > ? and read_date between ? and ? and usage_number is not null",
+       corrected_amt,start_date,end_date).order("corrected_amt DESC").limit(200)
+
      logger.debug("size is #{@readings.size}")
      puts "size is #{@readings.size}"
      render :action=>:index
-
-end
-
-
+  end
 end

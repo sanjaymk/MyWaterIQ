@@ -10,8 +10,12 @@ group :development do
 #	gem 'sqlite3', '1.3.5'
 	gem 'mysql'
 	gem 'mysql2'
+        gem 'smarter_csv'
 # gem 'activerecord-mysql2-adapter'
 end
+
+gem 'roo','~> 1.11.2'
+gem 'spreadsheet'
 
 
 # Gems used only for assets and not required

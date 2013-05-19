@@ -11,31 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130317214739) do
+ActiveRecord::Schema.define(:version => 20130513025623) do
 
   create_table "meter_readings", :force => true do |t|
-    t.string   "meter_id"
-    t.datetime "read_date"
+    t.string   "usage_number"
+    t.string   "corrected_amt"
+    t.string   "remote_id"
     t.string   "meter_reading"
-    t.integer  "corrected_amt"
+    t.string   "leak_status"
+    t.datetime "read_date"
+    t.string   "address"
+    t.string   "ocr_street_addr"
     t.string   "receiver_id"
-    t.string   "customer"
-    t.string   "customer_name"
-    t.string   "location_id"
-    t.string   "location"
-    t.string   "service_address"
-    t.string   "meter_number"
+    t.string   "service_type"
+    t.string   "equipment_class"
     t.string   "meter_size"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  create_table "thresholds", :force => true do |t|
-    t.string   "customer_id"
-    t.integer  "threshold_value"
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.string   "active"
+    t.string   "route_id"
+    t.string   "large_amt"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end

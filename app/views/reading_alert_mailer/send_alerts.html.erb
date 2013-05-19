@@ -8,6 +8,19 @@
     <p>
       The following customers readings are above the threshold.
       <%=@customer_names_for_alert%>
+<table border="1">
+  <tr>
+    <th>Customer Address</th>
+  </tr>
+
+<% @customer_names_for_alert.each do |customer_name| %>
+  <tr border="1">
+    <td border="1" nowrap><%= customer_name %></td>
+  </tr>
+<% end %>
+</table>
+
+
     </p>
   </body>
 </html>
