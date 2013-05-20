@@ -5,7 +5,7 @@ class ReadingAlertMailer < ActionMailer::Base
   def send_alerts(customer_names_for_alert)
   	
   	@customer_names_for_alert = customer_names_for_alert
-  	mail(:to=>'sanjay.manchiganti@gmail.com',:subject=>'Reading Alert')
+  	mail(:to=>'sanjay.manchiganti@gmail.com,hartman.grant@gmail.com,email2sanjay@yahoo.com',:subject=>'Reading Alert')
 
   end
 

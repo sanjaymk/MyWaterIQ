@@ -9,34 +9,64 @@ class MeterReadingsController < ApplicationController
      customer_names_for_alerts = Array.new;
 
 
-    lines = []
-    IO.foreach( "daily_files/orc_meters_working_whole.txt" ) do |line|
-      lines << line.split('\t').map { |v| v.strip }
-    end  
+    # lines = []
+    # IO.foreach( "daily_files/orc_meters_working_whole.txt" ) do |line|
+    #   lines << line.split('\t').map { |v| v.strip }
+    # end  
 
-    #puts "lines are:"
-    lines.each do |line|
-      puts lines.join("!")
-    end
+    # #puts "lines are:"
+    # lines.each do |line|
+    #   puts lines.join("!")
+    # end
 
-    File.open("daily_files/orc_meters_working_parsed.txt","w") { |f| f.write(lines) } 
-
-    arr = SmarterCSV.process('daily_files/orc_meters_working_parsed.txt',{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
+    # File.open("daily_files/orc_meters_working_parsed.txt","w") { |f| f.write(lines) } 
+    file_to_be_processed = 'daily_files/orc_meters_original1.txt';
+    arr = SmarterCSV.process(file_to_be_processed,{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
+    prev_row = Hash.new
     arr.each { |row|
-      if row[:read_date]
-      row[:read_date] = DateTime.strptime(row[:read_date],"%m/%d/%y").strftime("%Y-%m-%d") unless row[:read_date].nil?
-      row[:read_date] = row[:read_date] + ' ' + row[:last_time]
-      row.delete(:last_time)
-      MeterReading.create!(row)
+      curr_row = row
 
-        if(row[:large_amt]=='***')
-          customer_names_for_alerts << row[:ocr_street_addr]
+      if curr_row[:read_date]
+      curr_row[:read_date] = DateTime.strptime(curr_row[:read_date],"%m/%d/%y").strftime("%Y-%m-%d") unless curr_row[:read_date].nil?
+      curr_row[:read_date] = curr_row[:read_date] + ' ' + curr_row[:last_time]
+      curr_row.delete(:last_time)
+
+      if prev_row[:remote_id]
+        if prev_row[:remote_id] == curr_row[:remote_id]
+          logger.debug "Remote ids are equal"
+          curr_row[:usage_number] = curr_row[:corrected_amt].to_f - prev_row[:corrected_amt].to_f
+          logger.debug "Current row usage number is #{curr_row[:usage_number]}"
+          if curr_row[:usage_number] > 6000
+            curr_row[:large_amt] = "***"
+          else
+            curr_row[:large_amt] = ""
+          end
+          logger.debug "Creating MeterReading"
+          MeterReading.create!(prev_row)
+          MeterReading.create!(curr_row)
+        else
+          logger.debug "prev_row remote id is not equal to curr_row remote id. First row of iterationsetting the defaults for the curr row"
+          curr_row[:usage_number] = ""  
+          curr_row[:large_amt] = ""    
         end
+      else
+        logger.debug "First time setting the defaults for the curr_row"
+        curr_row[:usage_number] = ""  
+        curr_row[:large_amt] = ""  
+      end
+
+      prev_row = curr_row
+
+         if(row[:large_amt]=='***')
+           customer_names_for_alerts << row[:ocr_street_addr]
+         end
       end
     }
+    FileUtils.mv(file_to_be_processed,'processed')
     puts "Remote Ids that have a problem #{customer_names_for_alerts}"
 
     ReadingAlertMailer.send_alerts(customer_names_for_alerts).deliver if customer_names_for_alerts.size > 0
+
   end
 
   def old_refreshDailyData
