@@ -2,6 +2,7 @@ require 'net/ftp'
 
 task :getdailyfiles do 
 
+	Dir.mkdir("daily_files") unless Dir.exist?("daily_files")
 	Dir.chdir("daily_files") do
 		
 		Net::FTP.open("ftp.fkaa.com") do |ftp|
