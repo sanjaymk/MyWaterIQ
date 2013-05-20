@@ -20,8 +20,11 @@ class MeterReadingsController < ApplicationController
     # end
 
     # File.open("daily_files/orc_meters_working_parsed.txt","w") { |f| f.write(lines) } 
-    file_to_be_processed = 'daily_files/orc_meters_original1.txt';
-    arr = SmarterCSV.process(file_to_be_processed,{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
+    #file_to_be_processed = 'daily_files/orc_meters_original1.txt';
+
+  Dir.foreach("daily_files") { |file_to_be_processed|
+
+    arr = SmarterCSV.process('daily_files/'+file_to_be_processed,{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
     prev_row = Hash.new
     arr.each { |row|
       curr_row = row
@@ -62,7 +65,8 @@ class MeterReadingsController < ApplicationController
          end
       end
     }
-    FileUtils.mv(file_to_be_processed,'processed')
+    FileUtils.mv('daily_files/'+file_to_be_processed,'processed')
+  }
     puts "Remote Ids that have a problem #{customer_names_for_alerts}"
 
     ReadingAlertMailer.send_alerts(customer_names_for_alerts).deliver if customer_names_for_alerts.size > 0
