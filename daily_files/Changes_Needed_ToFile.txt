@@ -1,5 +1,0 @@
-1) Date format needs to be yyyy-mm-dd
-2) Header 
-meter_id|read_date|meter_reading|corrected_amt|receiver_id|customer|customer_name|location_id|location|service_address|meter_number|meter_size
-meter_id|read_date|meter_reading|Corrected Amt|receiver_id|customer|customername|LocationID|Location|ServiceAddress|MeterNumber|metersize
-3)
