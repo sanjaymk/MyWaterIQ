@@ -12,10 +12,10 @@ task :getdailyfiles do
 		end
 		curr_date = Time.now.strftime("%Y_%m_%d")
 		FileUtils.mv('orc_meters.txt',"orc_meters_#{curr_date}.txt")
-		logger.debug "File is downloaded successfully"
+		puts "File is downloaded successfully"
 	end
 
 
-	Dir.foreach("daily_files") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
+	Dir.foreach("daily_files") {|file_to_be_processed| puts "File is #{file_to_be_processed}"}
 	
 end
