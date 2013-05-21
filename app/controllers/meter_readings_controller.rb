@@ -22,6 +22,8 @@ class MeterReadingsController < ApplicationController
     # File.open("daily_files/orc_meters_working_parsed.txt","w") { |f| f.write(lines) } 
     #file_to_be_processed = 'daily_files/orc_meters_original1.txt';
   row_count = 0
+  Dir.foreach("daily_files") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
+  Dir.glob("daily_files/*.txt") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
   Dir.glob("daily_files/*.txt") { |file_to_be_processed|
     logger.debug "processing file #{file_to_be_processed}"
     arr = SmarterCSV.process(file_to_be_processed,{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
