@@ -22,14 +22,14 @@ class MeterReadingsController < ApplicationController
     # File.open("daily_files/orc_meters_working_parsed.txt","w") { |f| f.write(lines) } 
     #file_to_be_processed = 'daily_files/orc_meters_original1.txt';
   row_count = 0
-  Dir.foreach("daily_files") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
-  Dir.glob("daily_files/*.txt") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
-  Dir.glob("daily_files/*.txt") { |file_to_be_processed|
+  #Dir.foreach("daily_files") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
+  #Dir.glob("daily_files/*.txt") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
+  Dir.glob("#{Rails.root}/tmp/daily_files/*.txt") { |file_to_be_processed|
     logger.debug "processing file #{file_to_be_processed}"
     arr = SmarterCSV.process(file_to_be_processed,{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
     prev_row = Hash.new
     arr.each { |row|
-      row_count++
+      row_count = row_count + 1
       curr_row = row
 
       if curr_row[:read_date]
@@ -226,7 +226,7 @@ class MeterReadingsController < ApplicationController
 
      # @readings = MeterReading.where("corrected_amt > ? and read_date between ? and ? and customer_name like ?",
      #   corrected_amt,start_date,end_date,customer_name).order("corrected_amt DESC").limit(200)
-     @readings = MeterReading.where("corrected_amt > ? and read_date between ? and ? and usage_number is not null",
+     @readings = MeterReading.where("corrected_amt > ? and read_date >= ? and read_date <= ?and usage_number is not null",
        corrected_amt,start_date,end_date).order("corrected_amt DESC").limit(200)
 
      logger.debug("size is #{@readings.size}")
