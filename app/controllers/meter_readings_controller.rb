@@ -40,7 +40,7 @@ class MeterReadingsController < ApplicationController
   Dir.foreach("/tmp/daily_files/") {|file_to_be_processed| puts "File is #{file_to_be_processed}"}
   #Dir.foreach("daily_files") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
   #Dir.glob("daily_files/*.txt") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"
-  Dir.glob("#{Rails.root}/tmp/daily_files/*.txt") { |file_to_be_processed|
+  Dir.glob("/tmp/daily_files/*.txt") { |file_to_be_processed|
     logger.debug "processing file #{file_to_be_processed}"
     arr = SmarterCSV.process(file_to_be_processed,{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
     prev_row = Hash.new
