@@ -2,8 +2,8 @@ require 'net/ftp'
 
 task :getdailyfiles do 
 
-	 Dir.mkdir("app/tmp/daily_files") unless Dir.exist?("./tmp/daily_files")
-	Dir.chdir("app/tmp/daily_files") do
+	 Dir.mkdir("/tmp/daily_files") unless Dir.exist?("./tmp/daily_files")
+	Dir.chdir("/tmp/daily_files") do
 		
 		Net::FTP.open("ftp.fkaa.com") do |ftp|
 			ftp.passive = true
