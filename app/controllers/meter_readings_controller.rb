@@ -1,5 +1,6 @@
 require 'smarter_csv'
 require 'active_support/core_ext/hash'
+require 'net/ftp'
 
 class MeterReadingsController < ApplicationController
   # GET /meter_readings
@@ -9,20 +10,22 @@ class MeterReadingsController < ApplicationController
      customer_names_for_alerts = Array.new;
 
 
-  Dir.mkdir("/tmp/daily_files") unless Dir.exist?("./tmp/daily_files")
-  Dir.chdir("/tmp/daily_files") do
+  logger.info("#{Dir.exist?('./tmp/daily_files')}")
+  Dir.mkdir('./tmp/daily_files') unless Dir.exist?('./tmp/daily_files')
+  Dir.chdir('./tmp/daily_files') do
     
-    Net::FTP.open("ftp.fkaa.com") do |ftp|
-      ftp.passive = true
-      ftp.login("admin.mywateriq@fkaa.com","89jSAQ6E")
-      ftp.get("orc_meters.txt")
-    end
-    curr_date = Time.now.strftime("%Y_%m_%d")
-    FileUtils.mv('orc_meters.txt',"orc_meters_#{curr_date}.txt")
-
-
-    puts "File is downloaded successfully"
+  Net::FTP.open("ftp.fkaa.com") do |ftp|
+       ftp.passive = true
+       ftp.login("admin.mywateriq@fkaa.com","89jSAQ6E")
+       ftp.get("orc_meters.txt")
   end
+end
+  curr_date = Time.now.strftime("%Y_%m_%d")
+  FileUtils.mv('orc_meters.txt',"./tmp/daily_files/orc_meters_#{curr_date}.txt")
+
+
+     puts "File is downloaded successfully"
+   #end
 
     # lines = []
     # IO.foreach( "daily_files/orc_meters_working_whole.txt" ) do |line|
@@ -36,11 +39,12 @@ class MeterReadingsController < ApplicationController
 
     # File.open("daily_files/orc_meters_working_parsed.txt","w") { |f| f.write(lines) } 
     #file_to_be_processed = 'daily_files/orc_meters_original1.txt';
+
   row_count = 0
-  Dir.foreach("/tmp/daily_files/") {|file_to_be_processed| puts "File is #{file_to_be_processed}"}
+  Dir.foreach("daily_files/") {|file_to_be_processed| puts "File is #{file_to_be_processed}"}
   #Dir.foreach("daily_files") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"}
   #Dir.glob("daily_files/*.txt") {|file_to_be_processed| logger.debug "File is #{file_to_be_processed}"
-  Dir.glob("/tmp/daily_files/*.txt") { |file_to_be_processed|
+  Dir.glob("daily_files/*.txt") { |file_to_be_processed|
     logger.debug "processing file #{file_to_be_processed}"
     arr = SmarterCSV.process(file_to_be_processed,{:col_sep=>"\t",:key_mapping => {:usage=>:usage_number}})
     prev_row = Hash.new
