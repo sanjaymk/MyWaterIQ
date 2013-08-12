@@ -17,11 +17,12 @@ class MeterReadingsController < ApplicationController
   Net::FTP.open("ftp.fkaa.com") do |ftp|
        ftp.passive = true
        ftp.login("admin.mywateriq@fkaa.com","89jSAQ6E")
+       logger.info("getting files")
        ftp.get("orc_meters.txt")
   end
 end
-  curr_date = Time.now.strftime("%Y_%m_%d")
-  FileUtils.mv('orc_meters.txt',"./tmp/daily_files/orc_meters_#{curr_date}.txt")
+  curr_date = Time.now.strftime("%Y_%m_%d_%H_%M_%S")
+  FileUtils.mv('./tmp/daily_files/orc_meters.txt',"./tmp/daily_files/orc_meters_#{curr_date}.txt")
 
 
      puts "File is downloaded successfully"
