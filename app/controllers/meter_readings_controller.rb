@@ -135,6 +135,12 @@ end
     @readings = MeterReading.find(:all) if @readings.nil?
     @readings = Array.new if @readings.nil?
 
+    start_date = ((DateTime.now)-1).strftime("%Y-%m-%d") 
+    params[:start_date]=start_date
+
+    end_date = ((DateTime.now)-1).strftime("%Y-%m-%d")
+    params[:end_date]=end_date
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @meter_readings }
@@ -238,6 +244,16 @@ end
      end_date = params[:end_date] 
      end_date =DateTime.now.strftime("%Y-%m-%d") if end_date.to_s == ''
      params[:end_date]=end_date
+     leak_status = Array.new
+
+
+     if (params[:leak_status]=='All')
+       leak_status = [0,1,2]
+     else
+       leak_status[0] =  params[:leak_status]
+     end
+
+
      # customer_name = params[:customer_name]
      # if customer_name.to_s == ''
      #    customer_name = '%'
@@ -247,8 +263,9 @@ end
 
      # @readings = MeterReading.where("corrected_amt > ? and read_date between ? and ? and customer_name like ?",
      #   corrected_amt,start_date,end_date,customer_name).order("corrected_amt DESC").limit(200)
-     @readings = MeterReading.where("corrected_amt > ? and read_date >= ? and read_date <= ?and usage_number is not null",
-       corrected_amt,start_date,end_date).order("corrected_amt DESC").limit(200)
+     @readings = MeterReading.where("corrected_amt > ? and read_date >= ? and read_date <= ? 
+       and usage_number is not null and leak_status in (?)",
+       corrected_amt,start_date,end_date, leak_status.collect()).order("corrected_amt DESC").limit(200)
 
      logger.debug("size is #{@readings.size}")
      puts "size is #{@readings.size}"

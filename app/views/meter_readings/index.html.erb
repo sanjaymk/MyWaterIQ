@@ -3,19 +3,38 @@
 function doSearch()
 {
 
-    document.forms[0].action = document.forms[0].action + "?corrected_amt="+document.forms[0].corrected_amt.value+"&start_date="+document.forms[0].start_date.value+"&end_date="+document.forms[0].end_date.value+"&customer_name="+document.forms[0].customer_name.value;
+    document.forms[0].action = document.forms[0].action + "?corrected_amt="+document.forms[0].corrected_amt.value+"&start_date="+document.forms[0].start_date.value+"&end_date="+document.forms[0].end_date.value+"&customer_name="+document.forms[0].customer_name.value
+        +"&leak_status="+document.forms[0].leak_status.value;
     //alert(document.forms[0].action);
     document.forms[0].submit();
 
 }
 </script>
     <form action="/meter_readings/search" method="get">
+    <table>    
+        <tr>
+        <td colspan="2">
     <b>Search</b><br>
-    <b>Threshold value</b><input type="text" name="corrected_amt" value="<%=params[:corrected_amt]%>"><br>
-    <b>Start Date</b><input type="text" name="start_date" value="<%=params[:start_date]%>"> (yyyy-mm-dd)<br>
-    <b>End Date</b><input type="text" name="end_date" value="<%=params[:end_date]%>"> (yyyy-mm-dd)<br>
-    <b>Customer Name</b><input type="text" name="customer_name" value="<%=params[:customer_name]%>">
-    <input type="button" name="search" value="Search" onClick="return doSearch()">
+        </td>
+        <tr>
+            <td>
+    <b>Threshold value</b></td><td><input type="text" name="corrected_amt" value="<%=params[:corrected_amt]%>"></td>
+    <tr>
+        <td>
+    <b>Start Date</b></td><td><input type="text" name="start_date" value="<%=params[:start_date]%>"> (yyyy-mm-dd)</td></tr>
+    <tr><td>
+    <b>End Date</b></td><td><input type="text" name="end_date" value="<%=params[:end_date]%>"> (yyyy-mm-dd)</td></tr>
+    <tr><td><b>Customer Name</b></td><td><input type="text" name="customer_name" value="<%=params[:customer_name]%>"></td></tr>
+    <tr><td>Leak Status</td><td><select name="leak_status">
+        <option selected value="All">All</option>
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option> 
+    </td></tr>
+    <tr><td colspan="2"><input type="button" name="search" value="Search" onClick="return doSearch()">
+    </td></tr>
+
+</table>
     </form>
 <div>    
 
