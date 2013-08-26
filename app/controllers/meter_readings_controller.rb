@@ -132,32 +132,20 @@ end
 
   def index
   
-    @readings = MeterReading.find(:all) if @readings.nil?
+    start_date = ((DateTime.now)-10).strftime("%Y-%m-%d") 
+    end_date = ((DateTime.now)-1).strftime("%Y-%m-%d")
+
+
+    @readings = MeterReading.where("read_date >= ? and read_date <= ?",
+       start_date,end_date).order("corrected_amt DESC").limit(200)
+
     @readings = Array.new if @readings.nil?
 
-    start_date = ((DateTime.now)-1).strftime("%Y-%m-%d") 
-    params[:start_date]=start_date
-
-    end_date = ((DateTime.now)-1).strftime("%Y-%m-%d")
-    params[:end_date]=end_date
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @meter_readings }
     end
-  end
-
-  def readCSV
-
-    CSV.foreach('daily_files/DailyData3.txt',:headers=>true,:col_sep=>'|') do | row|
-      puts row.to_hash
-      logger.debug("Hash is #{row.to_hash}")
-      MeterReading.create!(row.to_hash)
-      #TestForInt.create!(row.to_hash)
-    end
-    @readings = Reading.where("corrected_amt = ?","103333")
-
-
   end
 
   # GET /meter_readings/1
